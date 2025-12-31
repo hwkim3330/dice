@@ -1,0 +1,322 @@
+/* =========================================
+   1. Blackjack.css 핵심 스타일 (Base Styles)
+   ========================================= */
+body {
+    margin: 0;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: sans-serif;
+}
+
+/* 모달 및 테이블 배경 공통 */
+.modal-panel {
+    max-width: 900px;
+    width: 95%;
+    height: 85vh;
+    /* 세로형 모바일 대응 */
+    display: flex;
+    flex-direction: column;
+    background-color: #1a1a1a;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+}
+
+.felt-table {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    /* 블랙잭 CSS의 배경 그라데이션 적용 */
+    background: radial-gradient(circle, #35654d 0%, #1e3c2e 100%);
+    border: 12px solid #3e2723;
+    box-sizing: border-box;
+    /* 테두리 포함 계산 */
+    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.8);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* =========================================
+   2. 바카라 전용 레이아웃 (Baccarat Layout)
+   ========================================= */
+
+/* 상단 딜러 영역 */
+.dealer-area {
+    height: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chip-tray {
+    width: 200px;
+    height: 40px;
+    background: #212121;
+    border: 2px solid #424242;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0 5px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.tray-slot {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    opacity: 0.5;
+    box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.tray-slot.red {
+    background: #e53935;
+}
+
+.tray-slot.blue {
+    background: #1e88e5;
+}
+
+.tray-slot.green {
+    background: #43a047;
+}
+
+.tray-slot.yellow {
+    background: #fdd835;
+}
+
+/* 중앙 베팅 보드 */
+.baccarat-board {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    gap: 15px;
+    position: relative;
+}
+
+/* 베팅 구역 공통 스타일 */
+.bet-zone {
+    width: 80%;
+    max-width: 500px;
+    border: 2px solid rgba(255, 213, 79, 0.4);
+    /* 금색 라인 */
+    border-radius: 50px;
+    /* 둥근 곡선 */
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    background: rgba(0, 0, 0, 0.1);
+    /* 약간 어둡게 */
+    position: relative;
+    cursor: pointer;
+}
+
+.bet-zone:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 213, 79, 0.8);
+}
+
+.bet-zone.active-bet {
+    box-shadow: 0 0 15px rgba(255, 213, 79, 0.3);
+    border-color: #fbbf24;
+}
+
+.zone-label {
+    color: rgba(255, 213, 79, 0.7);
+    /* 텍스트 금색 */
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* 개별 구역 크기 조정 */
+.tie-zone {
+    height: 60px;
+    width: 60%;
+    border-bottom: none;
+    /* 위쪽 둥글게, 아래 연결 느낌 */
+    border-radius: 30px 30px 10px 10px;
+    margin-bottom: -10px;
+    /* 겹치는 느낌 */
+    z-index: 1;
+}
+
+.banker-zone {
+    height: 120px;
+    z-index: 2;
+    background: radial-gradient(circle at center, rgba(220, 38, 38, 0.1) 0%, transparent 70%);
+    /* 뱅커 붉은 틴트 */
+}
+
+.player-zone {
+    height: 120px;
+    z-index: 2;
+    background: radial-gradient(circle at center, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+    /* 플레이어 푸른 틴트 */
+}
+
+/* 카드가 놓일 위치 (Hand Display) */
+.hand-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60px;
+    width: 100%;
+}
+
+/* =========================================
+   3. 카드 & 칩 스타일 (Blackjack.css 그대로 사용)
+   ========================================= */
+.bj-card {
+    width: 50px;
+    height: 75px;
+    background-color: white;
+    border-radius: 4px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 3px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    position: relative;
+    margin: 0 -15px;
+    /* 카드 겹침 */
+    user-select: none;
+}
+
+.bj-card.red {
+    color: #d32f2f;
+}
+
+.bj-card.black {
+    color: #212121;
+}
+
+.bj-card.back {
+    background: repeating-linear-gradient(45deg, #b71c1c, #b71c1c 5px, #c62828 5px, #c62828 10px);
+    border: 2px solid #fff;
+}
+
+/* 칩 스타일 */
+.bj-chip {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 3px dashed rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: transform 0.1s;
+}
+
+.bj-chip:hover {
+    transform: translateY(-4px);
+}
+
+.bj-chip:active {
+    transform: scale(0.9);
+}
+
+.chip-10 {
+    background-color: #e53935;
+}
+
+.chip-50 {
+    background-color: #1e88e5;
+}
+
+.chip-100 {
+    background-color: #43a047;
+}
+
+/* 하단 UI */
+.ui-bottom {
+    padding-bottom: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2rem;
+    margin-bottom: 10px;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: #dcfce7;
+    opacity: 0.7;
+}
+
+.info-val {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.info-val.yellow {
+    color: #fbbf24;
+}
+
+.info-val.white {
+    color: #fff;
+}
+
+.chip-select-area {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.controls-area {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* 버튼 */
+.btn-deal {
+    background-color: #eab308;
+    color: black;
+    font-weight: bold;
+    padding: 10px 40px;
+    border-radius: 9999px;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-deal:hover {
+    background-color: #facc15;
+}
+
+.btn-action {
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    color: white;
+    border-bottom: 3px solid;
+    cursor: pointer;
+}

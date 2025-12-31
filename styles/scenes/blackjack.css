@@ -1,0 +1,459 @@
+/* blackjack.css - 블랙잭 전용 스타일 */
+/* Tailwind → CSS 변환 */
+
+/* 모달 내부 컨테이너 (width/height 재정의) */
+#blackjack-modal .modal-panel {
+    max-width: 900px;
+    width: 95%;
+    height: 85vh;
+    /* 높이 제한 해제 */
+    display: flex;
+    flex-direction: column;
+    background-color: #1a1a1a;
+    /* bg-gray-900 */
+    padding: 0;
+    overflow: hidden;
+}
+
+/* 테이블 배경 (Felt Table) */
+.felt-table {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, #35654d 0%, #1e3c2e 100%);
+    border: 12px solid #3e2723;
+    border-radius: 20px;
+    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.8), 0 20px 40px rgba(0, 0, 0, 0.6);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+/* 카드 디자인 */
+.bj-card {
+    width: 60px;
+    height: 90px;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: center bottom;
+    user-select: none;
+}
+
+@media (min-width: 640px) {
+    .bj-card {
+        width: 75px;
+        height: 110px;
+        font-size: 1.1rem;
+        padding: 5px;
+    }
+}
+
+.bj-card.red {
+    color: #d32f2f;
+}
+
+.bj-card.black {
+    color: #212121;
+}
+
+.bj-card .center-suit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.6rem;
+}
+
+@media (min-width: 640px) {
+    .bj-card .center-suit {
+        font-size: 2rem;
+    }
+}
+
+.bj-card .corner-br {
+    text-align: right;
+    transform: rotate(180deg);
+    line-height: 1;
+}
+
+.bj-card .corner-tl {
+    text-align: left;
+    line-height: 1;
+}
+
+/* 카드 뒷면 */
+.bj-card.back {
+    background: repeating-linear-gradient(45deg, #b71c1c, #b71c1c 10px, #c62828 10px, #c62828 20px);
+    border: 2px solid #fff;
+}
+
+.bj-card.back * {
+    display: none;
+}
+
+/* 핸드 컨테이너 */
+.hand-container {
+    display: flex;
+    justify-content: center;
+    height: 100px;
+    position: relative;
+    perspective: 1000px;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 640px) {
+    .hand-container {
+        height: 120px;
+    }
+}
+
+.hand-container .bj-card {
+    margin-left: -30px;
+}
+
+@media (min-width: 640px) {
+    .hand-container .bj-card {
+        margin-left: -40px;
+    }
+}
+
+.hand-container .bj-card:first-child {
+    margin-left: 0;
+}
+
+.hand-container .bj-card:hover {
+    transform: translateY(-15px) rotate(2deg);
+    z-index: 50;
+}
+
+/* 딜러 점수 */
+.dealer-score,
+.player-score {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 2px 12px;
+    border-radius: 9999px;
+    font-family: monospace;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.player-score {
+    background-color: #d97706;
+    /* yellow-600 */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 결과 메시지 박스 */
+.msg-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease-out;
+    z-index: 20;
+}
+
+.msg-overlay.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.msg-title {
+    font-size: 2.25rem;
+    font-weight: 900;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.msg-title.win {
+    color: #fbbf24;
+}
+
+/* yellow-400 */
+.msg-title.lose {
+    color: #9ca3af;
+}
+
+/* gray-400 */
+.msg-title.push {
+    color: #ffffff;
+}
+
+.msg-desc {
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* 정보 패널 (돈/베팅/플레이어) */
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 28rem;
+    padding: 0 1rem;
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.info-col {
+    text-align: center;
+    width: 6rem;
+}
+
+.info-label {
+    font-size: 0.75rem;
+    color: rgba(220, 252, 231, 0.7);
+    /* green-200/70 */
+}
+
+.info-val {
+    font-size: 1.125rem;
+    font-weight: bold;
+}
+
+.info-val.yellow {
+    color: #fbbf24;
+}
+
+.info-val.white {
+    color: #fff;
+}
+
+/* 칩 버튼 */
+.bj-chip {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 4px dashed rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.1s;
+    font-size: 0.75rem;
+    background-size: cover;
+}
+
+@media (min-width: 640px) {
+    .bj-chip {
+        width: 55px;
+        height: 55px;
+        font-size: 0.8rem;
+    }
+}
+
+.bj-chip:active {
+    transform: scale(0.9);
+}
+
+.bj-chip:hover {
+    transform: translateY(-4px);
+}
+
+.chip-10 {
+    background-color: #e53935;
+}
+
+.chip-50 {
+    background-color: #1e88e5;
+}
+
+.chip-100 {
+    background-color: #43a047;
+}
+
+/* 컨트롤 패널 */
+.controls-area {
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* 버튼 스타일 */
+.btn-action {
+    flex: 1;
+    font-weight: bold;
+    padding: 0.75rem 0;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    border-bottom-width: 4px;
+    transition: all 0.1s;
+    font-size: 0.9rem;
+    margin: 0 0.25rem;
+    color: white;
+}
+
+@media (min-width: 640px) {
+    .btn-action {
+        font-size: 1rem;
+    }
+}
+
+.btn-action:active {
+    border-bottom-width: 0;
+    transform: translateY(4px);
+}
+
+.btn-hit {
+    background-color: #2563eb;
+    border-color: #1e40af;
+}
+
+/* blue-600 */
+.btn-stand {
+    background-color: #dc2626;
+    border-color: #991b1b;
+}
+
+/* red-600 */
+.btn-double {
+    background-color: #ca8a04;
+    border-color: #854d0e;
+    /* yellow-600 */
+    width: 5rem;
+    flex: none;
+    font-size: 0.75rem;
+    line-height: 1.2;
+}
+
+.btn-deal {
+    background-color: #eab308;
+    /* yellow-500 */
+    color: black;
+    font-weight: bold;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s;
+}
+
+.btn-deal:hover {
+    background-color: #facc15;
+}
+
+.btn-deal:disabled {
+    background-color: #4b5563;
+    color: #9ca3af;
+}
+
+.btn-deal:active {
+    transform: scale(0.95);
+}
+
+.btn-restart {
+    background-color: white;
+    color: #14532d;
+    /* green-900 */
+    font-weight: 900;
+    padding: 0.75rem 2.5rem;
+    border-radius: 9999px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    animation: bounce 1s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(-5%);
+    }
+
+    50% {
+        transform: translateY(5%);
+    }
+}
+
+/* 유틸리티 */
+.hidden {
+    display: none !important;
+}
+
+.flex {
+    display: flex;
+}
+
+.gap-2 {
+    gap: 0.5rem;
+}
+
+.gap-4 {
+    gap: 1rem;
+}
+
+.items-center {
+    align-items: center;
+}
+
+/* 애니메이션 클래스 */
+@keyframes dealSlide {
+    from {
+        opacity: 0;
+        transform: translate(50px, -100px) rotate(45deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(0, 0) rotate(0);
+    }
+}
+
+.deal-anim {
+    animation: dealSlide 0.4s forwards;
+}
+
+.scale-125 {
+    transform: scale(1.25);
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+/* Ace 버튼 */
+.ace-btn {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.4);
+    color: #aaa;
+    cursor: pointer;
+    margin-right: 0.25rem;
+}
+
+.ace-btn.active {
+    background: #fbbf24;
+    color: black;
+    font-weight: bold;
+    border-color: #fbbf24;
+    box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+}

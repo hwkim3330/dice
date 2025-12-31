@@ -1,0 +1,109 @@
+/* slotMachine.css - 슬롯 머신 전용 스타일 */
+
+.slot-wrap {
+    padding: 14px 12px 16px 12px;
+    display: flex;
+    justify-content: center;
+}
+
+.game-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+}
+
+#slotCanvas {
+    background: transparent;
+    cursor: grab;
+    touch-action: none;
+}
+
+#slotCanvas:active {
+    cursor: grabbing;
+}
+
+/* 슬롯 컨트롤 패널 */
+.control-panel {
+    width: 340px;
+    background: linear-gradient(180deg, #2b2b2b 0%, #1a1a1a 100%);
+    padding: 10px;
+    border-radius: 0 0 12px 12px;
+    border: 2px solid #444;
+    border-top: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+    margin-top: -5px;
+    z-index: 10;
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.lcd-display {
+    background: #0f380f;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 2px inset #0a250a;
+    min-width: 90px;
+    text-align: right;
+}
+
+.label {
+    display: block;
+    font-size: 8px;
+    color: #8bac8b;
+}
+
+.value {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #9cf59c;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.msg-box {
+    text-align: center;
+    color: #ffd700;
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 0.8rem;
+    margin: 5px 0;
+    min-height: 18px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.bet-btn {
+    pointer-events: auto;
+    background: linear-gradient(to bottom, #555, #333);
+    color: #fff;
+    border: 1px solid #777;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 0.7rem;
+}
+
+.bet-btn:active {
+    transform: translateY(1px);
+}
+
+.bet-btn.active {
+    background: linear-gradient(to bottom, #f59e0b, #d97706);
+    color: #000;
+    border-color: #fbbf24;
+}
+
+@media (max-width: 768px) {
+    .control-panel {
+        width: min(360px, 92vw);
+    }
+}

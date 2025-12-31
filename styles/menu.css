@@ -1,0 +1,139 @@
+/* menu.css - index.html single entry main menu/settings UI */
+
+.hidden { display: none !important; }
+
+/* Main menu overlay */
+#main-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(6px);
+}
+
+.menu-panel {
+  width: min(520px, 94vw);
+  background: rgba(18,18,18,0.92);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 20px 80px rgba(0,0,0,0.55);
+}
+
+.menu-title {
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  margin: 0 0 10px;
+}
+
+.menu-desc {
+  margin: 0 0 16px;
+  color: rgba(226,232,240,0.75);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.menu-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.menu-row label {
+  width: 74px;
+  font-size: 12px;
+  color: rgba(226,232,240,0.75);
+}
+
+.menu-row input {
+  flex: 1;
+  background: rgba(10,10,10,0.9);
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: #fff;
+  outline: none;
+}
+
+.menu-row input:focus {
+  border-color: rgba(255,255,255,0.28);
+}
+
+.menu-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.menu-btn {
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.08);
+  color: rgba(226,232,240,0.95);
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.menu-btn.primary {
+  background: rgba(34,197,94,0.92);
+  border-color: rgba(34,197,94,0.92);
+  color: rgba(10,10,10,0.95);
+}
+
+.menu-hint {
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(226,232,240,0.6);
+}
+
+/* Hide HUD/Chat while menu open */
+body.menu-open #ui-layer,
+body.menu-open #ui-top-right,
+body.menu-open #controls-panel,
+body.menu-open #ranking-layer,
+body.menu-open #chat-panel,
+body.menu-open #joystick-zone,
+body.menu-open #mobile-action,
+body.menu-open .settings-gear {
+  display: none !important;
+}
+
+/* In-game settings gear */
+.settings-gear {
+  position: fixed;
+  top: 14px;
+  right: 14px;
+  z-index: 1200;
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(20,20,20,0.65);
+  backdrop-filter: blur(6px);
+  color: rgba(226,232,240,0.92);
+  font-size: 18px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.settings-gear:active { transform: scale(0.98); }
+
+/* Settings modal */
+#settings-modal .modal-panel {
+  max-width: 420px;
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 14px;
+}

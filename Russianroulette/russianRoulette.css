@@ -1,0 +1,502 @@
+﻿:root{
+  --ink: rgba(6, 8, 14, 0.42);
+  --stroke: rgba(255, 255, 255, 0.10);
+  --text: rgba(245, 247, 255, 0.93);
+  --muted: rgba(245, 247, 255, 0.72);
+  --accent: #ff3d6e;
+  --accent2:#7c5cff;
+
+  --cyl-rot: 0deg; /* CSS revolver 실린더 회전 */
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  background: transparent;
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  overflow:hidden;
+  user-select:none;
+  touch-action:none;
+}
+
+#game-container{
+  position:relative;
+  width:100%;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: transparent;
+}
+
+#camera-stage{
+  transform-origin:50% 50%;
+  transition: transform 1000ms cubic-bezier(0.2,0.9,0.2,1);
+  will-change: transform;
+}
+
+canvas{
+  border-radius: 14px;
+  background: transparent;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.24);
+  border: none;
+}
+
+/* ===== VN 바 ===== */
+.vn-bar{
+  position:absolute;
+  right: 18px;
+  left:auto;
+  bottom: 64px;
+  transform: none;
+  width: min(560px, calc(100% - 24px));
+  background: rgba(6, 8, 14, 0.34);
+  border: none;
+  border-radius: 16px;
+  padding: 12px 14px;
+  box-shadow: 0 18px 56px rgba(0,0,0,0.38);
+  backdrop-filter: blur(10px);
+  display:none;
+  pointer-events:auto;
+}
+.vn-bar.show{ display:block; }
+
+.vn-top-actions{
+  position:absolute;
+  left:50%;
+  bottom: 190px;
+  transform: translateX(-50%);
+  display:none;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  pointer-events: auto;
+  z-index: 15;
+}
+.vn-top-actions.show{ display:flex; }
+
+.vn-top-actions button{
+  appearance:none;
+  border: none;
+  background: rgba(24, 28, 38, 0.92);
+  color: rgba(255,255,255,0.92);
+  padding: 10px 14px;
+  border-radius: 14px;
+  cursor:pointer;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+  min-width: 120px;
+}
+.vn-top-actions button:hover{
+  transform: translateY(-1px);
+  background: rgba(32, 38, 52, 0.96);
+}
+.vn-top-actions button.primary{
+  background: linear-gradient(180deg, rgba(124,92,255,0.92), rgba(255,61,110,0.72));
+  box-shadow: 0 10px 28px rgba(124,92,255,0.22), 0 10px 28px rgba(255,61,110,0.18);
+}
+.vn-top-actions button.danger{
+  background: linear-gradient(180deg, rgba(255,61,110,0.92), rgba(255,61,110,0.48));
+  box-shadow: 0 10px 28px rgba(255,61,110,0.22);
+}
+
+.vn-speaker{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  margin-bottom: 6px;
+}
+.vn-speaker::before{
+  content:"";
+  width:10px;height:10px;border-radius:99px;
+  background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+  box-shadow: 0 0 16px rgba(255,61,110,0.5);
+}
+.vn-text{
+  white-space: pre-line;
+  line-height: 1.35;
+  font-size: 15px;
+  color: rgba(245,247,255,0.92);
+}
+
+/* 버튼 영역: 중앙 아래 고정 */
+.vn-actions{
+  display:flex;
+  gap: 10px;
+  margin-top: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.vn-actions button{
+  appearance:none;
+  border:1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  padding: 10px 14px;
+  border-radius: 14px;
+  cursor:pointer;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+  min-width: 120px;
+}
+.vn-actions button:hover{
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(255,255,255,0.28);
+}
+.vn-actions button.primary{
+  border-color: rgba(124,92,255,0.55);
+  background: linear-gradient(180deg, rgba(124,92,255,0.28), rgba(255,61,110,0.18));
+}
+
+/* 가위바위보 버튼(아이콘+라벨) */
+.rps-btn{
+  display:flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items:center;
+  justify-content:center;
+  padding: 12px 16px;
+  min-width: 140px;
+}
+.rps-icon{
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size: 28px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.25);
+}
+.rps-label{
+  font-size: 13px;
+  opacity: 0.88;
+}
+
+/* ===== 결과 오버레이 ===== */
+.result-overlay{
+  position:absolute;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  background: transparent;
+  backdrop-filter: none;
+  z-index: 30;
+}
+.result-overlay.show{ display:flex; }
+
+.result-card{
+  width: min(520px, calc(100% - 32px));
+  border-radius: 18px;
+  background: rgba(12,14,18,0.9);
+  border: none;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55);
+  padding: 18px 18px 16px;
+}
+.result-card h2{ margin:0 0 8px; font-size:22px; }
+.result-card p{ margin:0 0 14px; color: rgba(255,255,255,0.78); white-space: pre-line; line-height: 1.45; }
+.result-actions{ display:flex; justify-content:flex-end; }
+.result-actions button{
+  appearance:none;
+  border: none;
+  background: rgba(24, 28, 38, 0.92);
+  color: rgba(255,255,255,0.92);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor:pointer;
+  font-weight: 900;
+}
+.result-actions button.primary{
+  background: linear-gradient(180deg, rgba(255,61,110,0.92), rgba(124,92,255,0.72));
+}
+
+/* =========================================================
+   REVOLVER CSS ART (pasted.txt 기반, 컨테이너/배경 제거 버전)
+   ========================================================= */
+.revolver-art{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:auto;
+  transform-origin: center;
+}
+.revolver-art.hidden{
+  display:none;
+}
+.revolver-art.npc-turn{
+  transform: scaleX(-1);
+}
+
+.revolver-art .gun-wrapper{
+  position: relative;
+  width: 500px;
+  height: 380px;
+  transform-origin: center;
+  cursor: pointer;
+  transition: transform 0.1s;
+  filter: drop-shadow(0 18px 48px rgba(0,0,0,0.45));
+}
+
+.revolver-art .metal{
+  background: linear-gradient(180deg, #4b5563 0%, #374151 40%, #1f2937 100%);
+  position:absolute;
+}
+
+.revolver-art .barrel-group{
+  position:absolute;
+  top: 50px;
+  left: 170px;
+  width: 220px;
+  height: 60px;
+  z-index:5;
+}
+.revolver-art .barrel{
+  width:210px;height:34px;top:0;left:0;
+  border-radius: 2px 2px 0 0;
+  z-index:2;
+}
+.revolver-art .barrel-underlug{
+  width:150px;height:18px;top:34px;left:0;
+  border-radius: 0 0 5px 40px;
+  z-index:2;
+}
+.revolver-art .barrel-rib{
+  width:210px;height:8px;top:-8px;left:0;
+  background:#374151;
+  position:absolute;
+}
+.revolver-art .front-sight{
+  width:0;height:0;
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-bottom:18px solid #1f2937;
+  position:absolute;
+  top:-22px;
+  left:190px;
+}
+
+.revolver-art .frame-group{
+  position:absolute;
+  top:50px;
+  left:60px;
+  width:110px;
+  height:90px;
+  z-index:4;
+}
+.revolver-art .frame-top{
+  width:120px;height:45px;top:0;left:0;border-radius:4px 0 0 0;
+}
+.revolver-art .frame-rear-curve{
+  width:60px;height:100px;top:10px;left:-15px;
+  border-radius:25px 0 0 20px;
+  transform: skewX(-10deg);
+  z-index:3;
+}
+.revolver-art .rear-sight{
+  width:30px;height:14px;top:-14px;left:-5px;
+  background:#1f2937;
+  position:absolute;
+  border-radius:4px 4px 0 0;
+  transform: skewX(-8deg);
+}
+
+/* 실린더 */
+.revolver-art .cylinder-window{
+  position:absolute;
+  top:60px;
+  left:90px;
+  width:85px;
+  height:70px;
+  z-index:10;
+}
+.revolver-art .cylinder{
+  width:100%;
+  height:100%;
+  background: linear-gradient(90deg, #374151 0%, #1f2937 20%, #374151 40%, #1f2937 60%, #374151 80%);
+  border-radius:8px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+  transition: transform 0.1s;
+  transform: rotate(var(--cyl-rot));
+}
+
+/* 탄 상태 점 표시 */
+.revolver-art .cyl-dots{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+}
+.revolver-art .cyl-dot{
+  position:absolute;
+  width:10px;height:10px;border-radius:99px;
+  background: rgba(255,255,255,0.18);
+  border:1px solid rgba(0,0,0,0.35);
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.6);
+}
+.revolver-art .cyl-dot.live{ background: #d6b24a; }
+.revolver-art .cyl-dot.spent{ background: #5e4830; }
+
+/* 그립 */
+.revolver-art .grip-container{
+  position:absolute;
+  top:100px;
+  left:15px;
+  width:100px;
+  height:140px;
+  z-index:3;
+  transform: rotate(10deg);
+  transform-origin: top right;
+}
+.revolver-art .grip-wood{
+  position:absolute;
+  width:100%;
+  height:100%;
+  background-image:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.05) 0%, transparent 20%),
+    repeating-linear-gradient(120deg, rgba(62, 39, 35, 0.8) 0px, rgba(93, 64, 55, 0) 2px, rgba(93, 64, 55, 0) 8px),
+    linear-gradient(to right, #4e342e, #6d4c41, #3e2723);
+  border-radius: 10px 10px 40px 50px;
+  box-shadow:
+    inset 5px 5px 15px rgba(0,0,0,0.3),
+    inset -5px -5px 10px rgba(0,0,0,0.5),
+    4px 4px 8px rgba(0,0,0,0.4);
+  border: 1px solid #281812;
+}
+.revolver-art .grip-medallion{
+  width:20px;height:20px;
+  background: radial-gradient(circle, #fbbf24 0%, #b45309 90%);
+  border-radius:50%;
+  position:absolute;
+  top:35px;left:45px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  border: 1px solid #78350f;
+  z-index:5;
+}
+.revolver-art .grip-screw{
+  width:12px;height:12px;
+  background: radial-gradient(circle, #9ca3af, #4b5563);
+  border-radius:50%;
+  position:absolute;
+  bottom:40px;left:48px;
+  box-shadow: inset 1px 1px 2px rgba(0,0,0,0.8);
+  z-index:5;
+}
+.revolver-art .grip-screw::after{
+  content:'';
+  position:absolute;
+  top:5px;left:2px;
+  width:8px;height:2px;
+  background:#1f2937;
+  transform: rotate(-45deg);
+}
+
+/* 트리거 */
+.revolver-art .trigger-guard{
+  position:absolute;
+  top:125px;
+  left:100px;
+  width:65px;
+  height:50px;
+  border:5px solid #374151;
+  border-top:none;
+  border-left:3px solid #374151;
+  border-radius: 5px 5px 30px 25px;
+  z-index:2;
+}
+.revolver-art .trigger{
+  position:absolute;
+  top:128px;
+  left:128px;
+  width:10px;
+  height:30px;
+  background:#111827;
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+  transform-origin: top center;
+  z-index:1;
+  transition: transform 0.05s;
+}
+
+/* 해머 */
+.revolver-art .hammer{
+  position:absolute;
+  top:45px;
+  left:45px;
+  width:18px;
+  height:35px;
+  background:#374151;
+  border-radius:4px;
+  transform-origin: bottom right;
+  transform: rotate(-10deg);
+  z-index:2;
+  transition: transform 0.05s;
+}
+.revolver-art .hammer-spur{
+  position:absolute;
+  top:0;
+  right:0;
+  width:24px;
+  height:8px;
+  background:#374151;
+  border-radius:2px 2px 0 0;
+  transform: skewX(25deg);
+}
+
+.revolver-art .muzzle-flash{
+  position:absolute;
+  top: 15px;
+  left: 390px;
+  width: 100px;
+  height: 80px;
+  background: radial-gradient(circle, #fef08a 20%, #f97316 60%, transparent 80%);
+  border-radius: 50%;
+  opacity: 0;
+  z-index: 20;
+  transform: scale(0.5);
+  pointer-events:none;
+  mix-blend-mode: screen;
+}
+
+/* 애니메이션 상태 */
+.revolver-art .gun-wrapper.cocking .trigger{
+  transform: rotate(-30deg) translate(-2px, -2px);
+}
+.revolver-art .gun-wrapper.cocking .hammer{
+  transform: rotate(-50deg);
+}
+.revolver-art .gun-wrapper.cocking .cylinder{
+  transform: rotate(var(--cyl-rot)) rotateX(45deg);
+}
+.revolver-art .gun-wrapper.firing .hammer{
+  transform: rotate(5deg);
+}
+.revolver-art .gun-wrapper.recoil{
+  animation: recoil 0.2s cubic-bezier(0.1, 0.6, 0.4, 1);
+}
+.revolver-art .gun-wrapper.recoil .muzzle-flash{
+  animation: flash 0.1s ease-out;
+}
+
+@keyframes recoil{
+  0%{ transform: rotate(0deg) translate(0,0); }
+  10%{ transform: rotate(-15deg) translate(-20px,-10px); }
+  100%{ transform: rotate(0deg) translate(0,0); }
+}
+@keyframes flash{
+  0%{ opacity: 1; transform: scale(1.5); }
+  100%{ opacity: 0; transform: scale(0.5); }
+}

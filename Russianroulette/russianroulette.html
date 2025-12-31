@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Russian Roulette Simulator</title>
+  <link rel="stylesheet" href="./russianRoulette.css" />
+  <script defer src="./russianRoulette.js"></script>
+</head>
+<body>
+    <div id="game-container">
+      <div id="camera-stage">
+      <!-- 캔버스(실린더/총알 씬에만 사용) -->
+      <canvas id="canvas" width="900" height="600"></canvas>
+
+      <!-- REVOLVER CSS ART (pasted.txt 기반) -->
+      <div id="revolver-art" class="revolver-art hidden" aria-hidden="true">
+        <div class="gun-wrapper" id="gun" role="button" aria-label="revolver">
+          <div class="hammer">
+            <div class="hammer-spur"></div>
+          </div>
+
+          <div class="frame-group">
+            <div class="frame-top metal"></div>
+            <div class="frame-rear-curve metal"></div>
+            <div class="rear-sight"></div>
+          </div>
+
+          <div class="barrel-group">
+            <div class="barrel metal"></div>
+            <div class="barrel-underlug metal"></div>
+            <div class="barrel-rib"></div>
+            <div class="front-sight"></div>
+          </div>
+
+          <div class="cylinder-window">
+            <div class="cylinder" id="css-cylinder"></div>
+
+            <!-- 탄 상태 표시(옵션) -->
+            <div class="cyl-dots" id="cyl-dots"></div>
+          </div>
+
+          <div class="trigger" id="css-trigger"></div>
+          <div class="trigger-guard"></div>
+
+          <div class="grip-container">
+            <div class="grip-wood"></div>
+            <div class="grip-medallion"></div>
+            <div class="grip-screw"></div>
+          </div>
+
+          <div class="muzzle-flash"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상단 선택 버튼(승인/거절 전용) -->
+    <div class="vn-top-actions" id="vn-top-actions" aria-hidden="true"></div>
+
+    <!-- VN 바(하단, 중앙) -->
+    <div class="vn-bar show" id="vn-overlay" aria-hidden="false">
+      <div class="vn-speaker" id="vn-speaker">권총남</div>
+      <div class="vn-text" id="vn-text">화면을 클릭하면 시작합니다.</div>
+
+      <!-- 버튼 영역: 항상 중앙 아래 -->
+      <div class="vn-actions" id="vn-actions"></div>
+    </div>
+
+    <!-- 결과 오버레이 -->
+    <div class="result-overlay" id="result-overlay" aria-hidden="true">
+      <div class="result-card">
+        <h2 id="result-title">—</h2>
+        <p id="result-desc">—</p>
+        <div class="result-actions">
+          <button class="primary" id="result-restart">처음부터</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

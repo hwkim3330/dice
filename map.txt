@@ -1,0 +1,68 @@
+DiceLand1.0/
+├─ index.html
+│  └─ 엔트리 페이지
+│     - CSS 로드(styles/*)
+│     - JS는 src/main.js만 type="module"로 로드(단일 진입점)
+│
+├─ styles/
+│  ├─ base.css
+│  │  └─ 리셋/폰트/공통 변수(색, 간격 등)
+│  ├─ hud.css
+│  │  └─ 상단 HUD(잔고/안내/공통 UI)
+│  ├─ modal.css
+│  │  └─ 공통 모달(열기/닫기/백드롭) 스타일
+│  └─ scenes/
+│     ├─ casino.css
+│     │  └─ 카지노 씬 전용 스타일
+│     ├─ exchange.css
+│     │  └─ 환전 UI 전용 스타일
+│     └─ slotMachine.css
+│        └─ 슬롯 UI 전용 스타일
+│
+├─ src/
+│  ├─ main.js
+│  │  └─ “단일 게임 루프” + 씬 매니저 초기화/등록
+│  │     - requestAnimationFrame 여기 1개만 존재(원칙)
+│  │
+│  ├─ core/
+│  │  ├─ appState.js
+│  │  │  └─ 돈/칩 상태의 “유일한 변경 경로”
+│  │  │     - commit/subscribe 구조(단일 갱신 경로)
+│  │  ├─ constants.js
+│  │  │  └─ 키맵/액션 enum/튜닝값/씬ID 같은 상수 모음
+│  │  ├─ input.js
+│  │  │  └─ 키/버튼/터치 입력을 action으로 통일
+│  │  ├─ player.js
+│  │  │  └─ 플레이어 좌표/이동/속도(공용)
+│  │  ├─ sceneManager.js
+│  │  │  └─ 씬 전환 관리(enter/exit 호출 + 현재 씬 라우팅)
+│  │  ├─ storage.js
+│  │  │  └─ localStorage 저장/로드 래퍼(세이브)
+│  │  └─ ui.js
+│  │     └─ HUD/프롬프트/모달 공통 컨트롤(열기/닫기)
+│  │
+│  ├─ features/
+│  │  ├─ exchange/
+│  │  │  ├─ exchangeRules.js
+│  │  │  │  └─ 환율/수수료/검증 같은 “규칙”만
+│  │  │  └─ exchangeUI.js
+│  │  │     └─ 환전 모달 UI/버튼 이벤트/표시(화면 로직)
+│  │  └─ slotMachine/
+│  │     ├─ slotMachineAPI.js
+│  │     │  └─ AppState 연결층(칩 spend/add만 호출)
+│  │     ├─ slotMachineLogic.js
+│  │     │  └─ 확률/보상/룰(순수 로직)
+│  │     └─ slotMachineUI.js
+│  │        └─ 슬롯 UI/애니/렌더(화면 로직)
+│  │
+│  └─ scenes/
+│     └─ casino/
+│        ├─ casinoData.js
+│        │  └─ 배치 데이터(벽/테이블/슬롯 위치 등)
+│        └─ casinoScene.js
+│           └─ 카지노 씬 본체
+│              - enter/exit/handleAction/update 표준 인터페이스 구현
+│
+└─ legacy/   (선택)
+   └─ 구버전 파일 보관창고(안 쓰면 삭제 가능)
+      - casino.js / exchange.js / money.js / slotMachine.js / style.css

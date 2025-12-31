@@ -1,0 +1,128 @@
+/* playerList.css - Player list overlay + death overlay */
+
+.playerlist {
+    position: fixed;
+    inset: 0;
+    z-index: 2200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+}
+
+.playerlist-panel {
+    width: min(720px, 92vw);
+    background: rgba(12, 14, 20, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.55);
+    color: #e5e7eb;
+}
+
+.playerlist-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.playerlist-title {
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    font-size: 14px;
+    color: #fbbf24;
+}
+
+.playerlist-sub {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    font-variant-numeric: tabular-nums;
+}
+
+.playerlist-body {
+    display: grid;
+    gap: 6px;
+    max-height: 360px;
+    overflow: auto;
+}
+
+.playerlist-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 140px 90px;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 12px;
+}
+
+.playerlist-col {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.playerlist-col.cash {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+.playerlist-col.status {
+    text-align: right;
+    font-weight: 800;
+}
+
+.playerlist-col.status.local {
+    color: #22c55e;
+}
+
+.playerlist-col.status.online {
+    color: #60a5fa;
+}
+
+.playerlist-col.status.offline {
+    color: #9ca3af;
+}
+
+.playerlist-hint {
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.55);
+    text-align: right;
+}
+
+.death-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+}
+
+.death-panel {
+    width: min(420px, 88vw);
+    background: rgba(12, 14, 20, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 16px;
+    padding: 18px;
+    text-align: center;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.5);
+}
+
+.death-title {
+    font-size: 20px;
+    font-weight: 900;
+    color: #f87171;
+}
+
+.death-sub {
+    margin-top: 6px;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+}

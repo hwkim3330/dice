@@ -1,0 +1,417 @@
+﻿<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover" />
+  <title>DiceLand 1.4</title>
+
+  <link rel="stylesheet" href="./styles/base.css" />
+  <link rel="stylesheet" href="./styles/hud.css" />
+  <link rel="stylesheet" href="./styles/modal.css" />
+  <link rel="stylesheet" href="./styles/chat.css" />
+  <link rel="stylesheet" href="./styles/menu.css" />
+  <link rel="stylesheet" href="./styles/playerList.css" />
+  <link rel="stylesheet" href="./styles/scenes/slotMachine.css" />
+  <link rel="stylesheet" href="./styles/scenes/exchange.css" />
+  <link rel="stylesheet" href="./styles/scenes/casino.css" />
+  <link rel="stylesheet" href="./styles/scenes/blackjack.css" />
+  <link rel="stylesheet" href="./styles/scenes/roulette.css" />
+  <link rel="stylesheet" href="./styles/scenes/russianroulette.css" />
+
+  <link rel="icon" href="./assets/favicon.ico" />
+</head>
+
+<body>
+  <div id="app">
+  <!-- MAIN MENU (index single entry) -->
+  <div id="main-menu" class="hidden" aria-hidden="true">
+    <div class="menu-panel">
+      <h1 class="menu-title">DICE LAND</h1>
+      <p class="menu-desc">닉네임을 설정하고 입장하세요. (TAB: 플레이어 목록)</p>
+
+      <div class="menu-row">
+        <label for="menu-nickname">닉네임</label>
+        <input id="menu-nickname" type="text" maxlength="12" placeholder="닉네임" />
+      </div>
+
+      <div class="menu-actions">
+        <button id="menu-start" class="menu-btn primary" type="button">시작하기</button>
+      </div>
+
+      <div class="menu-hint">온라인 표시: 우측 상단 서버 (0/50명)</div>
+    </div>
+  </div>
+
+  <!-- Settings Gear (in-game) -->
+  <button id="settings-btn" class="settings-gear" type="button" aria-label="설정">⚙</button>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" id="settings-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="설정">
+      <h2 class="modal-title">설정</h2>
+      <p class="modal-desc">메인 화면으로 돌아가거나 계속할 수 있습니다.</p>
+      <div class="settings-actions">
+        <button id="settings-to-main" class="menu-btn" type="button">메인으로</button>
+        <button id="settings-close" class="menu-btn primary" type="button">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME CANVAS -->
+  <canvas id="gameCanvas" width="1280" height="720"></canvas>
+
+  <!-- HUD -->
+  <div id="ui-layer">
+    <div class="hud-box">
+      <h1 class="hud-title">GRAND CASINO</h1>
+      <p class="hud-sub">위치: <span id="location-text">카지노 로비</span></p>
+    </div>
+  </div>
+
+  <!-- Controls Panel (right) -->
+  <div id="controls-panel" class="hidden">
+    <div class="hud-box hud-help">
+      <div>이동: WASD / 방향키</div>
+      <div>상호작용: <b>F</b></div>
+      <div>닫기: <b>ESC</b></div>
+    </div>
+  </div>
+
+  <div id="ui-top-right">
+    <button id="controls-toggle" type="button" aria-pressed="false">컨트롤 변경(모바일)</button>
+
+    <div id="server-status" class="hud-box">
+      <div class="hud-title">SERVER</div>
+      <div id="server-count" class="hud-value" data-server-count>0/50명</div>
+    </div>
+
+    <div class="hud-box">
+      <div class="hud-title">돈</div>
+      <div id="money-display" class="hud-value">0원</div>
+    </div>
+
+    <div class="hud-box">
+      <div class="hud-title">칩</div>
+      <div id="chip-display" class="hud-value">0</div>
+    </div>
+  </div>
+
+  <!-- Ranking Layer -->
+  <div id="ranking-layer">
+    <div id="ranking-panel" class="ranking-box">
+      <div class="ranking-title">
+        <span>TOP 도박사</span>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <span style="font-size: 11px; opacity: 0.7;">실시간</span>
+          <button id="rank-toggle" type="button">닫기</button>
+        </div>
+      </div>
+      <ul id="ranking-list" class="ranking-list"></ul>
+    </div>
+  </div>
+
+  <div id="interaction-prompt" class="interaction-prompt" aria-hidden="true"></div>
+
+  <!-- Mobile -->
+  <div id="joystick-zone">
+    <div id="joystick-knob"></div>
+  </div>
+  <button id="mobile-action" class="mobile-action" type="button" aria-label="상호작용(F)">F</button>
+
+  <!-- SLOT MODAL -->
+  <div id="slot-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" id="slot-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="슬롯머신">
+      <div class="modal-topbar">
+        <div class="modal-title">SLOT MACHINE</div>
+        <button class="modal-close" id="slot-close-btn" type="button">닫기 (ESC)</button>
+      </div>
+      <div class="slot-wrap">
+        <div class="game-container">
+          <canvas id="slotCanvas" width="400" height="240"></canvas>
+          <div class="control-panel">
+            <div class="status-bar">
+              <div class="lcd-display">
+                <span class="label">CREDIT</span>
+                <span id="creditDisplay" class="value">0</span>
+              </div>
+              <div class="lcd-display">
+                <span class="label">WIN</span>
+                <span id="winDisplay" class="value">0</span>
+              </div>
+            </div>
+            <div class="msg-box" id="msgArea">레버를 당겨주세요!</div>
+            <div class="buttons">
+              <button class="bet-btn" data-bet="10" type="button">10칩</button>
+              <button class="bet-btn" data-bet="50" type="button">50칩</button>
+              <button class="bet-btn active" data-bet="100" type="button">100칩(MAX)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXCHANGE MODAL -->
+  <div id="exchange-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" id="exchange-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="환전소">
+      <div class="modal-topbar">
+        <div class="modal-title">EXCHANGE</div>
+        <button class="modal-close" id="exchange-close-btn" type="button">닫기 (ESC)</button>
+      </div>
+      <div class="slot-wrap">
+        <div class="game-container">
+          <div class="control-panel" style="border-top: 2px solid #444; border-radius: 12px;">
+            <div class="status-bar">
+              <div class="lcd-display">
+                <span class="label">CASH (원)</span>
+                <span id="exchangeCash" class="value">0</span>
+              </div>
+              <div class="lcd-display">
+                <span class="label">CHIPS</span>
+                <span id="exchangeChips" class="value">0</span>
+              </div>
+              <div class="lcd-display">
+                <span class="label">CHIP VALUE (원)</span>
+                <span id="exchangeChipValue" class="value">0</span>
+              </div>
+            </div>
+            <div class="msg-box" id="exchangeMsg">환전할 금액(칩)을 선택하세요!</div>
+            <div class="buttons" style="flex-wrap: wrap;">
+              <button class="bet-btn xchg-btn" data-dir="C2H" data-amount="10" type="button">1만원 → 10칩</button>
+              <button class="bet-btn xchg-btn" data-dir="C2H" data-amount="50" type="button">5만원 → 50칩</button>
+              <button class="bet-btn xchg-btn" data-dir="C2H" data-amount="100" type="button">10만원 → 100칩</button>
+              <button class="bet-btn xchg-btn" data-dir="H2C" data-amount="10" type="button">10칩 → 1만원</button>
+              <button class="bet-btn xchg-btn" data-dir="H2C" data-amount="50" type="button">50칩 → 5만원</button>
+              <button class="bet-btn xchg-btn" data-dir="H2C" data-amount="100" type="button">100칩 → 10만원</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLACKJACK MODAL -->
+  <div id="blackjack-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" id="blackjack-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="블랙잭">
+      <div class="modal-topbar">
+        <div class="modal-title">BLACKJACK - STRATEGY</div>
+        <button class="modal-close" id="blackjack-close-btn" type="button">닫기 (ESC)</button>
+      </div>
+      <div class="felt-table">
+        <div class="flex" style="flex-direction: column; align-items: center; padding-top: 2rem;">
+          <div style="color: rgba(220,252,231,0.5); font-weight: bold; margin-bottom: 0.5rem; letter-spacing: 0.2em; font-size: 0.75rem;">DEALER</div>
+          <div style="height: 2rem; margin-bottom: 0.5rem; display: flex; align-items: center;">
+            <span id="bj-dealer-score" class="dealer-score">0</span>
+          </div>
+          <div id="bj-dealer-hand" class="hand-container" style="width: 100%;"></div>
+        </div>
+        <div style="position: relative; flex: 1; display: flex; align-items: center; justify-content: center;">
+          <div class="msg-overlay" id="bj-message-box">
+            <h1 id="bj-game-result" class="msg-title">WIN!</h1>
+            <p id="bj-game-desc" class="msg-desc">딜러 버스트</p>
+          </div>
+        </div>
+        <div class="flex" style="flex-direction: column; align-items: center; padding-bottom: 1.5rem; position: relative; z-index: 10; width: 100%;">
+          <div id="bj-player-hand" class="hand-container" style="width: 100%; margin-bottom: 0.5rem;"></div>
+          <div class="info-row">
+            <div class="info-col" style="text-align: left;">
+              <div class="info-label">보유 칩</div>
+              <div id="bj-chips-display" class="info-val yellow">0</div>
+            </div>
+            <div class="flex" style="flex-direction: column; align-items: center;">
+              <span style="color: rgba(220,252,231,0.5); font-weight: bold; letter-spacing: 0.2em; font-size: 0.75rem; margin-bottom: 0.25rem;">PLAYER</span>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div id="bj-ace-controls" class="hidden">
+                  <button id="bj-ace-1" class="ace-btn">A=1</button>
+                  <button id="bj-ace-11" class="ace-btn active">A=11</button>
+                </div>
+                <span id="bj-player-score" class="player-score">0</span>
+              </div>
+            </div>
+            <div class="info-col" style="text-align: right;">
+              <div class="info-label">현재 베팅</div>
+              <div id="bj-bet-display" class="info-val white">0</div>
+            </div>
+          </div>
+          <div id="bj-panel-betting" class="controls-area">
+            <div class="flex gap-4">
+              <button class="bj-chip chip-10" data-amount="10">10</button>
+              <button class="bj-chip chip-50" data-amount="50">50</button>
+              <button class="bj-chip chip-100" data-amount="100">100</button>
+            </div>
+            <div style="width: 1px; height: 32px; background: rgba(255,255,255,0.2); margin: 0 1rem;"></div>
+            <button id="bj-btn-reset" class="text-xs" style="color: #fca5a5; font-weight: bold; margin-right: 1rem;">취소</button>
+            <button id="bj-btn-deal" disabled class="btn-deal">게임 시작</button>
+          </div>
+          <div id="bj-panel-play" class="controls-area hidden">
+            <button id="bj-btn-hit" class="btn-action btn-hit">히트 (Hit)</button>
+            <button id="bj-btn-stand" class="btn-action btn-stand">스탠드 (Stand)</button>
+            <button id="bj-btn-double" class="btn-action btn-double">더블<br>다운</button>
+          </div>
+          <div id="bj-panel-restart" class="controls-area hidden">
+            <button id="bj-btn-restart" class="btn-restart">다시 하기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROULETTE MODAL -->
+  <div id="roulette-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" id="roulette-backdrop"></div>
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-label="룰렛">
+      <div class="modal-topbar">
+        <div class="modal-title">ROYAL ROULETTE</div>
+        <div style="display:flex; gap:0.5rem; align-items:center;">
+          <button id="roulette-help-btn" class="btn-help-icon" title="배당률 보기">?</button>
+          <button class="modal-close" id="roulette-close-btn" type="button">닫기 (ESC)</button>
+        </div>
+      </div>
+
+      <!-- 도움말(배당률) 모달 오버레이 -->
+      <div id="roulette-help-overlay" class="help-overlay hidden">
+        <div class="help-panel">
+          <div class="help-header">
+            <h3>배당률 안내 (Payouts)</h3>
+            <button id="roulette-help-close" class="help-close">?</button>
+          </div>
+          <div class="help-body">
+            <p class="help-note">
+              ※ 배당률은 <strong>'원금 포함 지급'</strong> 기준입니다.<br>
+              <span class="text-sm text-gray-400">예: 2배 = 1000원 베팅 시 2000원 지급 (순이익 1000원)</span>
+            </p>
+
+            <div class="payout-table-wrap">
+              <table class="payout-table">
+                <thead>
+                  <tr>
+                    <th>베팅 종류</th>
+                    <th>당첨 조건</th>
+                    <th>지급 배수</th>
+                    <th>순이익</th>
+                  </tr>
+                </thead>
+                <tbody id="roulette-payout-list"></tbody>
+              </table>
+            </div>
+
+            <div class="help-footer">
+              <p class="text-caution">
+                ※ <strong>0(Zero) 당첨 시 주의사항</strong><br>
+                숫자 '0'에 직접 베팅한 경우를 제외하고,<br>
+                빨강/검정, 홀/짝, 범위, 더즌 등 <strong>모든 그룹 베팅은 미당첨</strong> 처리됩니다.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="roulette-table">
+        <div style="display:flex; justify-content:center; align-items:center; padding-top:1rem; position: relative; flex:1;">
+          <div class="wheel-container">
+            <div class="wheel-pointer"></div>
+            <div id="roulette-wheel" class="wheel"></div>
+            <div class="wheel-center">
+              <span id="roulette-result">?</span>
+            </div>
+          </div>
+
+          <div id="roulette-msg" class="roulette-msg">
+            <h2 id="roulette-msg-title" class="roulette-msg-title">WIN!</h2>
+            <p id="roulette-msg-desc" class="roulette-msg-desc">+100</p>
+          </div>
+        </div>
+
+        <div class="roulette-controls">
+          <div class="roulette-info">
+            <div>
+              <div class="label-xs">CHIPS</div>
+              <div id="roulette-money" class="val-xl text-yellow">0</div>
+            </div>
+            <div style="text-align:right;">
+              <div class="label-xs">BET</div>
+              <div id="roulette-bet" class="val-xl">0</div>
+            </div>
+          </div>
+
+          <div class="betting-board-wrap">
+            <div id="roulette-board" class="betting-board"></div>
+            <div class="side-bets">
+              <div class="bet-cell cell-plain side-bet-btn" data-type="1st12">1st 12</div>
+              <div class="bet-cell cell-plain side-bet-btn" data-type="2nd12">2nd 12</div>
+              <div class="bet-cell cell-plain side-bet-btn" data-type="3rd12">3rd 12</div>
+              <div class="bet-cell cell-plain side-bet-btn" data-type="1to18">1-18</div>
+              <div class="bet-cell cell-red side-bet-btn" data-type="even">EVEN</div>
+              <div class="bet-cell cell-red side-bet-btn" data-type="red">RED</div>
+              <div class="bet-cell cell-black side-bet-btn" data-type="black">BLACK</div>
+              <div class="bet-cell cell-black side-bet-btn" data-type="odd">ODD</div>
+              <div class="bet-cell cell-plain side-bet-btn" data-type="19to36">19-36</div>
+            </div>
+          </div>
+
+          <div class="btn-bar">
+            <button class="chip chip-10" data-val="10">10</button>
+            <button class="chip chip-50" data-val="50">50</button>
+            <button class="chip chip-100" data-val="100">100</button>
+
+            <div class="divider"></div>
+
+            <button id="btn-roulette-clear" class="btn-clear block">초기화</button>
+            <button id="btn-roulette-spin" disabled class="btn-spin">SPIN</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Russian Roulette Modal -->
+  <div id="rr-modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-card rr-card">
+      <button id="rr-close" class="modal-close" type="button" aria-label="닫기">X</button>
+      <iframe id="rr-iframe" class="rr-iframe" title="Russian Roulette" src="about:blank"></iframe>
+    </div>
+  </div>
+
+  <!-- Player List (TAB) -->
+  <div id="playerlist-overlay" class="playerlist hidden" aria-hidden="true">
+    <div class="playerlist-panel" role="dialog" aria-label="플레이어 목록">
+      <div class="playerlist-top">
+        <div class="playerlist-title">PLAYERS</div>
+        <div id="playerlist-sub" class="playerlist-sub">0/50명</div>
+      </div>
+      <div id="playerlist-body" class="playerlist-body"></div>
+      <div class="playerlist-hint">TAB: 닫기</div>
+    </div>
+  </div>
+
+  <!-- Death Overlay -->
+  <div id="death-overlay" class="death-overlay hidden" aria-hidden="true">
+    <div class="death-panel">
+      <div class="death-title">사망하셨습니다.</div>
+      <div class="death-sub">모든 돈이 초기화됩니다.</div>
+    </div>
+  </div>
+
+  <!-- Chat -->
+  <div id="chat-panel" class="chat-panel">
+    <div class="chat-header">
+      <div class="chat-title">CHAT</div>
+      <div class="chat-actions">
+        <button id="chat-toggle" type="button">닫기</button>
+      </div>
+    </div>
+    <div id="chat-log" class="chat-log"></div>
+    <div class="chat-input-row">
+      <input id="chat-input" class="chat-input" placeholder="T 또는 Enter로 채팅" />
+      <button id="chat-send" class="chat-send">전송</button>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+  </div>
+</body>
+</html>

@@ -1,0 +1,557 @@
+/* roulette.css - 룰렛 전용 스타일 */
+/* Tailwind → CSS 변환 */
+
+/* 모달 내부 컨테이너 */
+#roulette-modal .modal-panel {
+    max-width: 900px;
+    width: 95%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #1a1a1a;
+    padding: 0;
+    overflow: hidden;
+    user-select: none;
+}
+
+/* 테이블 배경 (Felt Table) - 블랙잭과 통일 */
+.roulette-table {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    background: radial-gradient(circle, #35654d 0%, #1e3c2e 100%);
+    border: 12px solid #3e2723;
+    border-radius: 20px;
+    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.8), 0 20px 40px rgba(0, 0, 0, 0.6);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 1rem;
+}
+
+/* 룰렛 휠 컨테이너 */
+.wheel-container {
+    position: relative;
+    width: 240px;
+    height: 240px;
+    border-radius: 50%;
+    background: #2d1e12;
+    padding: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    margin: 1rem auto;
+}
+
+@media (min-width: 640px) {
+    .wheel-container {
+        width: 280px;
+        height: 280px;
+        padding: 10px;
+    }
+}
+
+/* 회전하는 휠 */
+.wheel {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    transition: transform 4s cubic-bezier(0.15, 0.90, 0.30, 1.00);
+    background: #fff;
+    border: 4px solid #d4af37;
+}
+
+/* 휠 내부 숫자 세그먼트 */
+.wheel-number {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -10px;
+    /* X축 오프셋: 숫자를 세그먼트 중앙으로 보정 */
+    width: 20px;
+    height: 50%;
+    transform-origin: center bottom;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 15px;
+    font-size: 9px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    pointer-events: none;
+}
+
+/* 휠 중앙 장식 */
+.wheel-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50px;
+    height: 50px;
+    background: radial-gradient(circle, #d4af37, #8a6e1e);
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid white;
+}
+
+@media (min-width: 640px) {
+    .wheel-center {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+#result-display {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+}
+
+/* 휠 포인터 */
+.wheel-pointer {
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 20px solid #fbbf24;
+    z-index: 20;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* 결과 메시지 박스 */
+.roulette-msg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    text-align: center;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    transition: all 0.3s ease-out;
+    z-index: 30;
+    pointer-events: none;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.roulette-msg.show {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+
+.roulette-msg-title {
+    font-size: 2.25rem;
+    font-weight: 900;
+    color: #fbbf24;
+    margin-bottom: 0.5rem;
+}
+
+.roulette-msg-desc {
+    font-size: 1.125rem;
+    font-weight: bold;
+    color: white;
+}
+
+/* 하단 배팅 컨트롤 */
+.roulette-controls {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(4px);
+    padding-bottom: 1.5rem;
+    padding-top: 0.5rem;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    flex-shrink: 0;
+}
+
+/* 정보 표시줄 */
+.roulette-info {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    margin-bottom: 0.5rem;
+    font-family: monospace;
+    color: white;
+}
+
+.label-xs {
+    font-size: 10px;
+    color: #9ca3af;
+}
+
+.val-xl {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.text-yellow {
+    color: #fbbf24;
+}
+
+/* 배팅 보드 */
+.betting-board-wrap {
+    padding: 0 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.betting-board {
+    display: grid;
+    grid-template-columns: 40px repeat(3, 1fr);
+    gap: 2px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+/* 배팅 셀 */
+.bet-cell {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-weight: bold;
+    color: white;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.1s;
+    font-size: 0.9rem;
+}
+
+.bet-cell:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.cell-red {
+    background-color: rgba(220, 38, 38, 0.8);
+}
+
+.cell-black {
+    background-color: rgba(30, 30, 30, 0.8);
+}
+
+.cell-green {
+    background-color: rgba(22, 163, 74, 0.8);
+}
+
+.cell-plain {
+    background-color: transparent;
+    border-color: rgba(255, 255, 255, 0.3);
+    border-radius: 0.25rem;
+}
+
+/* 사이드 배팅 */
+.side-bets {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 600px;
+    margin: 0.5rem auto 0;
+    padding: 0 0.5rem;
+}
+
+/* 배팅 마커 */
+.bet-marker {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #fbbf24;
+    color: black;
+    font-size: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 5;
+    border: 2px dashed white;
+    pointer-events: none;
+}
+
+/* 하단 버튼바 */
+.btn-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0 1rem;
+    height: 4rem;
+}
+
+.chip {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 4px dashed rgba(255, 255, 255, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 4px 5px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.1s;
+    font-size: 0.75rem;
+}
+
+@media (min-width: 640px) {
+    .chip {
+        width: 50px;
+        height: 50px;
+        font-size: 0.8rem;
+    }
+}
+
+.chip.selected {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.5);
+    border-color: #fbbf24;
+}
+
+.chip-10 {
+    background-color: #e53935;
+}
+
+.chip-50 {
+    background-color: #1e88e5;
+}
+
+.chip-100 {
+    background-color: #43a047;
+}
+
+.divider {
+    width: 1px;
+    height: 2.5rem;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-clear {
+    color: #fca5a5;
+    font-weight: bold;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.btn-clear:hover {
+    color: #fecaca;
+}
+
+.btn-spin {
+    background-color: #eab308;
+    color: black;
+    font-weight: 900;
+    padding: 0.5rem 2rem;
+    border-radius: 9999px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.1s;
+    font-size: 1.125rem;
+}
+
+.btn-spin:disabled {
+    background-color: #4b5563;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.btn-spin:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+/* 도움말 버튼 */
+.btn-help {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-help:hover {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* 도움말 모달(내부)은 별도 CSS나 인라인 스타일 사용 */
+/* 도움말 버튼 아이콘 */
+.btn-help-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-help-icon:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+}
+
+/* 도움말 오버레이 (Nested Modal) */
+.help-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 100; /* 모달 내부 최상위 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(4px);
+    opacity: 1;
+    transition: opacity 0.2s;
+}
+
+.help-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+}
+
+.help-panel {
+    width: 90%;
+    max-width: 500px;
+    background: #1e1e1e;
+    border: 1px solid #4ade80;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.help-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #2d2d2d;
+    border-bottom: 1px solid #333;
+}
+
+.help-header h3 {
+    color: #4ade80;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.help-close {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.help-close:hover {
+    color: white;
+}
+
+.help-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
+.help-note {
+    font-size: 0.9rem;
+    color: #e5e7eb;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.75rem;
+    border-radius: 6px;
+}
+
+/* 배당률 테이블 */
+.payout-table-wrap {
+    margin-bottom: 1rem;
+    border: 1px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.payout-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    text-align: left;
+}
+
+.payout-table th {
+    background: #333;
+    color: #fbbf24;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: bold;
+    border-bottom: 1px solid #444;
+}
+
+.payout-table td {
+    padding: 0.75rem;
+    color: #d1d5db;
+    border-bottom: 1px solid #333;
+}
+
+.payout-table tr:last-child td {
+    border-bottom: none;
+}
+
+.payout-table td:nth-child(3),
+.payout-table td:nth-child(4) {
+    text-align: center;
+    font-weight: bold;
+    color: white;
+}
+
+.text-caution {
+    font-size: 0.85rem;
+    color: #fca5a5;
+    background: rgba(220, 38, 38, 0.1);
+    padding: 0.75rem;
+    border-radius: 6px;
+    line-height: 1.5;
+    border-left: 3px solid #ef4444;
+}
